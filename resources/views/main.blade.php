@@ -31,5 +31,20 @@
   </table>
   <p>{{ $message }}</p>
 </div>
+
+
+<div id="viewUser">
+  <h3>All users</h3>
+  <table>
+    <tr>
+      <td> First name </td>
+      <td> Last name </td>
+      <td> Location </td>
+      <td> Field of Expertise </td>
+      <td> Hourly Rate </td>
+    </tr>
+    <td> {{ $user_data}} </td>
+  </table>
+</div>
 </body>
 </html>

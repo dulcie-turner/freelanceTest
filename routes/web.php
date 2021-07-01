@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
+use App\Http\Controllers\UserController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,17 +17,8 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('/', function () {
-    return view('main', ['message'=>'']);
-});
+// handle displaying main page
+Route::get('/', [UserController::class, 'display']);
 
-Route::post('/', function (Request $request) {
-
-    
-
-    $sql_query = "insert into users (firstname, lastname, location, field, rate) VALUES (\"{$request->input("firstname")}\" , \"{$request->input("lastname")}\",
-     \"{$request->input("location")}\", \"{$request->input("field")}\", {$request->input("rate")});";
-     $users = DB::insert($sql_query);
-     //return view('main', ['message'=>$sql_query]);
-    return view('main', ['message'=>'User added!']);
-})->name("addUser");
+// handle adding a new user
+Route::post('/', [UserController::class, 'add_user'])->name("addUser");
