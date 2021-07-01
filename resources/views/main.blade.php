@@ -36,15 +36,32 @@
 <div id="viewUser">
   <h3>All users</h3>
   <table>
-    <tr>
+    <tr style="font-weight:bold">
       <td> First name </td>
       <td> Last name </td>
       <td> Location </td>
       <td> Field of Expertise </td>
       <td> Hourly Rate </td>
     </tr>
-    <td> {{ $user_data}} </td>
+    @foreach ($user_data as $user)
+    <tr>
+      <td> {{$user->firstname}} </td>
+      <td> {{$user->lastname}} </td>
+      <td> {{$user->location}} </td>
+      <td> {{$user->field}} </td>
+      <td> {{$user->rate}} </td>
+    </tr>
+    @endforeach
+
+
   </table>
+
+  <form action="{{route('changeCurrency')}}" method='POST'>
+  @csrf
+  <label>Select a currency: </label>
+  <select name="currency">
+    <option value="gbp">GBP</option>
+  </form>
 </div>
 </body>
 </html>
