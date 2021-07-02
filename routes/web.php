@@ -22,5 +22,3 @@ Route::get('/', [UserController::class, 'display']);
 
 // handle adding a new user
 Route::post('/', [UserController::class, 'form_submit'])->name("formSubmit");
-
-//Route::post('/', [UserController::class, 'change_currency'])->name("changeCurrency");
