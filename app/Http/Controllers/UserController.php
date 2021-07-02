@@ -10,9 +10,9 @@ use GuzzleHttp\Client;
 class UserController extends Controller
 {
     private $currency = "gbp";
+    private $rate_type = "local";
     // exchange rate from gbp (currency used in database) to selected currency
     private $exchange_rate = 1;
-    private $rate_type = "local";
 
     public function display()
     {
@@ -85,7 +85,7 @@ class UserController extends Controller
     private function change_currency(Request $request)
     {
         $user_data = $this->get_user_data();
-        
+
 
         // handle changing the exchange rate
         $this->currency = $request->input('currency');

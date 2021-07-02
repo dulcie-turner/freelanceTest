@@ -54,6 +54,7 @@
         @csrf
         <label>Select a currency: </label>
         <select name="currency">
+        <!-- Creates the currency selection box, while autoselecting the current currency -->
           @if ($currency == "GBP")
           <option value="gbp" selected>GBP</option>
           <option value="usd">USD</option>
@@ -69,6 +70,7 @@
           @endif
         </select>
         <select name="rate_type">
+        <!-- Creates the exchange rate selection box, while autoselecting the current method used -->
           @if ($rate_type == "local")
           <option value="local" selected>Local </option>
           <option value="third">Third-party</option>
