@@ -9,27 +9,28 @@ use GuzzleHttp\Client;
 
 class UserController extends Controller
 {
-    public $currency = "gbp";
-    public $exchange_rate = 1;
+    private $currency = "gbp";
+    // exchange rate from gbp (currency used in database) to selected currency
+    private $exchange_rate = 1;
+    private $rate_type = "local";
 
     public function display()
     {
         // display main page
         $user_data = $this->get_user_data();
-
-        return view('main', ['message' => '', 'user_data' => $user_data, 'currency' => strtoupper($this->currency), 'rate' => $this->exchange_rate]);
+        return view('main', ['message' => '', 'user_data' => $user_data, 'currency' => strtoupper($this->currency), 'rate' => $this->exchange_rate, 'rate_type' => $this->rate_type]);
     }
 
     private function add_user(Request $request)
     {
-        $user_data = $this->get_user_data();
-
-        // insert user into database
+        // insert user into database (validation done in html form)
         $sql_query = "insert into users (firstname, lastname, location, field, rate) VALUES (\"{$request->input("firstname")}\" , \"{$request->input("lastname")}\",
-         \"{$request->input("location")}\", \"{$request->input("field")}\", {$request->input("rate")});";
-        $users = DB::insert($sql_query);
+         \"{$request->input("location")}\", \"{$request->input("field")}\", \"{$request->input("rate")}\");";
+        DB::insert($sql_query);
 
-        return view('main', ['message' => "User added.", 'user_data' => $user_data, 'currency' => strtoupper($this->currency), 'rate' => $this->exchange_rate]);
+        // display page
+        $user_data = $this->get_user_data();
+        return view('main', ['message' => "User added.", 'user_data' => $user_data, 'currency' => strtoupper($this->currency), 'rate' => $this->exchange_rate, 'rate_type' => $this->rate_type]);
     }
 
     private function get_user_data()
@@ -81,29 +82,30 @@ class UserController extends Controller
         }
     }
 
-    public function change_currency(Request $request)
+    private function change_currency(Request $request)
     {
         $user_data = $this->get_user_data();
+        
 
         // handle changing the exchange rate
         $this->currency = $request->input('currency');
         if ($request->input('rate_type') == 'local') {
+            $this->rate_type = 'local';
             $this->local_rate($this->currency);
         } else {
+            $this->rate_type = 'third';
             $this->third_party_rate($this->currency);
         }
 
-        return view('main', ['message' => '', 'user_data' => $user_data, 'currency' => strtoupper($this->currency), 'rate' => $this->exchange_rate]);
+        return view('main', ['message' => '', 'user_data' => $user_data, 'currency' => strtoupper($this->currency), 'rate' => $this->exchange_rate, 'rate_type' => $this->rate_type]);
     }
 
     public function form_submit(Request $request)
     {
-        // handle form being submitted
-
-        if ($request->has('firstname')) {
+        if ($request->submit == 'Submit') {
             // request is for new user
             return $this->add_user($request);
-        } else {
+        } elseif ($request->submit == 'Change Currency') {
             // request is to change currency
             return $this->change_currency($request);
         }

@@ -1,7 +1,16 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
+<head>
+  <style>
+    td {
+      padding: 5px;
+    }
+  </style>
+</head>
+
 <body>
+
   <div id="newUser">
     <h3>Add User</h3>
     <table>
@@ -34,28 +43,45 @@
     </table>
     <p>{{ $message }}</p>
   </div>
-<br>
+
 
   <div id="viewUser">
 
     <h3>View Users</h3>
 
-    <form action="{{route('formSubmit')}}" method='POST'>
-      @csrf
-      <label>Select a currency: </label>
-      <select name="currency">
-        <option value="gbp">GBP </option>
-        <option value="usd">USD</option>
-        <option value="eur">EUR</option>
-      </select>
-      <select name="rate_type">
-        <option value="local">Local </option>
-        <option value="third">Third-party</option>
-      </select>
-      <input type="submit" value="Submit" name="submit">
-    </form>
-
-    <table>
+    <div id="changeCurrency">
+      <form action="{{route('formSubmit')}}" method='POST'>
+        @csrf
+        <label>Select a currency: </label>
+        <select name="currency">
+          @if ($currency == "GBP")
+          <option value="gbp" selected>GBP</option>
+          <option value="usd">USD</option>
+          <option value="eur">EUR</option>
+          @elseif ($currency == "USD")
+          <option value="gbp">GBP</option>
+          <option value="usd" selected>USD</option>
+          <option value="eur">EUR</option>
+          @elseif ($currency == "EUR")
+          <option value="gbp">GBP</option>
+          <option value="usd">USD</option>
+          <option value="eur" selected>EUR</option>
+          @endif
+        </select>
+        <select name="rate_type">
+          @if ($rate_type == "local")
+          <option value="local" selected>Local </option>
+          <option value="third">Third-party</option>
+          @elseif ($rate_type == "third")
+          <option value="local">Local </option>
+          <option value="third" selected>Third-party</option>
+          @endif
+        </select>
+        <input type="submit" value="Change Currency" name="submit">
+      </form>
+    </div>
+    <br>
+    <table border style="padding:3px">
       <tr style="font-weight:bold">
         <td> First name </td>
         <td> Last name </td>
